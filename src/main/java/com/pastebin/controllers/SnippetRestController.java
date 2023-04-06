@@ -1,16 +1,15 @@
 package com.pastebin.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pastebin.JsonViewSchema;
+import com.pastebin.entities.Snippet;
+import com.pastebin.services.SnippetService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import com.pastebin.JsonViewSchema;
-import com.pastebin.entities.Snippet;
-import com.pastebin.services.SnippetService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +55,7 @@ public class SnippetRestController {
     }
 
     @PostMapping(path = "/new")
-    public String addNewSnippet(@RequestBody String newSnippetJson) throws JsonProcessingException {
+    public String addNewSnippet(@RequestBody String newSnippetJson) {
         try {
             String newCode = objectMapper.readValue(newSnippetJson, NewCode.class).getCode();
             int newSnippetId = snippetService.saveSnippet(new Snippet(newCode));

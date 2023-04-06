@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Create</title>
 </head>
 <body>
-<textarea id="code_snippet"></textarea>
+<label for="code_snippet"></label><textarea id="code_snippet"></textarea>
 <button id="send_snippet" type="submit" onclick="send()">Submit</button>
 <script>
     function send() {
@@ -20,7 +20,7 @@
         xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
         xhr.send(json);
 
-        if (xhr.status == 200) {
+        if (xhr.status === 200) {
             alert("Success!");
         }
     }

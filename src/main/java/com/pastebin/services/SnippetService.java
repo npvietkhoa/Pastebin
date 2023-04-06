@@ -27,15 +27,15 @@ public class SnippetService {
         return snippetRepository.findAll().size();
     }
 
-    public List<Snippet> findAll() {
-        return snippetRepository.findAll()
-                .stream()
-                .map(this::convertSnippetDTOToSnippet)
-                .toList();
-    }
+//    public List<Snippet> findAll() {
+//        return snippetRepository.findAll()
+//                .stream()
+//                .map(this::convertSnippetDTOToSnippet)
+//                .toList();
+//    }
     public Snippet getSnippetById(int id) {
 
-        return convertSnippetDTOToSnippet(snippetRepository.getById(id));
+        return convertSnippetDTOToSnippet(snippetRepository.getReferenceById(id));
     }
 
     public List<Snippet> getLastSnippets(int quantity) {

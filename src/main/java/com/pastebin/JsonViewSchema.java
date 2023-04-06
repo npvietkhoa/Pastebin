@@ -5,5 +5,5 @@ public class JsonViewSchema {
     public static class postView{}
 
     public static class getView{}
-    public static class fullView extends postView{};
+    public static class fullView extends postView{}
 }
