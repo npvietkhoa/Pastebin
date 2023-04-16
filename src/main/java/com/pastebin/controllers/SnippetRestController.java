@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api/code/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -24,7 +25,7 @@ public class SnippetRestController {
     }
 
     @GetMapping(path = "/{id}")
-    public SnippetDTO getSnippetJsonById(@PathVariable int id) {
+    public SnippetDTO getSnippetJsonById(@PathVariable String id) {
         return snippetService.getSnippetById(id);
     }
 
@@ -34,15 +35,13 @@ public class SnippetRestController {
     }
 
     @PostMapping(path = "/new")
-    public int addNewSnippet(@RequestBody String newSnippetJson) {
+    public UUID addNewSnippet(@RequestBody String newSnippetJson) {
         try {
             NewCode newCode = objectMapper.readValue(newSnippetJson, NewCode.class);
-
             return snippetService.saveSnippet(new Snippet(newCode.getCode()));
-
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return 0;
+            return UUID.fromString("0");
         }
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class SnippetService {
@@ -22,9 +23,8 @@ public class SnippetService {
         this.snippetRepository = snippetRepository;
         this.snippetDTOMapper = snippetDTOMapper;
     }
-    public synchronized int saveSnippet(Snippet snippet) {
-        snippetRepository.save(snippet);
-        return snippetRepository.findAll().size();
+    public synchronized UUID saveSnippet(Snippet snippet) {
+        return snippetRepository.save(snippet).getId();
     }
 
     public List<SnippetDTO> findAll() {
@@ -34,8 +34,8 @@ public class SnippetService {
                 .toList();
     }
 
-    public SnippetDTO getSnippetById(int id) {
-        return snippetDTOMapper.apply(snippetRepository.getReferenceById(id));
+    public SnippetDTO getSnippetById(String id) {
+        return snippetDTOMapper.apply(snippetRepository.getReferenceById(UUID.fromString(id)));
     }
 
     public List<SnippetDTO> getLastSnippets(int quantity) {

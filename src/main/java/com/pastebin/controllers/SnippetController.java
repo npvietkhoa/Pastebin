@@ -26,7 +26,7 @@ public class SnippetController {
     }
 
     @GetMapping(value = "/{id}")
-    public ModelAndView getCodePage(@NotNull HttpServletResponse response, @PathVariable int id)  {
+    public ModelAndView getCodePage(@NotNull HttpServletResponse response, @PathVariable String id)  {
         response.addHeader("Content-Type", "text/html");
 
         try {
