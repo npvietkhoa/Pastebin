@@ -7,9 +7,11 @@ import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -17,8 +19,9 @@ import java.time.LocalDateTime;
 public class Snippet {
     @Id
     @GeneratedValue
+    @UuidGenerator
     @Setter(AccessLevel.NONE)
-    private Long id;
+    private UUID id;
 
     private String code;
 
