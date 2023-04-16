@@ -11,7 +11,7 @@
 
 <body>
 <div th:each="snippet:${snippetList}">
-    <span id="created_date" th:utext="${snippet.formatCreatedDateTime()}"></span>
+    <span id="created_date" th:utext="${#dates.format(snippet.createdDateTime, 'dd-MM-yyyy HH:mm:ss')}"></span>
     <pre id="code_snippet"><code th:utext="${snippet.code}"></code></pre>
 </div>
 </body>

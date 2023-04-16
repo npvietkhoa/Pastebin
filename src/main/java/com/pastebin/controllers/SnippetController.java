@@ -1,7 +1,8 @@
 package com.pastebin.controllers;
 
 
-import com.pastebin.entities.Snippet;
+import com.pastebin.entities.SnippetDTO;
+import com.pastebin.services.SnippetService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,10 @@ import java.util.List;
 @RequestMapping(value = "/code", produces = MediaType.TEXT_HTML_VALUE)
 public class SnippetController {
 
-    final private SnippetRestController snippetRestController;
+    final private SnippetService snippetService;
     @Autowired
-    public SnippetController(SnippetRestController snippetRestController) {
-        this.snippetRestController = snippetRestController;
+    public SnippetController(SnippetService snippetService) {
+        this.snippetService = snippetService;
     }
 
     @GetMapping(value = "/{id}")
@@ -31,7 +32,7 @@ public class SnippetController {
         try {
             ModelAndView model = new ModelAndView("codePage");
             model.addObject("pageTitle", "Code");
-            Snippet snippet = snippetRestController.getSnippetById(id);
+            SnippetDTO snippet = snippetService.getSnippetById(id);
             model.addObject("snippetList", List.of(snippet));
             model.setViewName("codePage");
             return model;
@@ -47,7 +48,7 @@ public class SnippetController {
 
             ModelAndView model = new ModelAndView("codePage");
             model.addObject("pageTitle", "Latest");
-            model.addObject("snippetList", snippetRestController.getLastSnippets());
+            model.addObject("snippetList", snippetService.getLastSnippets(10));
 
             model.setViewName("codePage");
             return model;

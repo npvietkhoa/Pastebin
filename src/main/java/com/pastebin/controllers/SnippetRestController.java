@@ -1,17 +1,14 @@
 package com.pastebin.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pastebin.JsonViewSchema;
+import com.pastebin.entities.NewCode;
 import com.pastebin.entities.Snippet;
+import com.pastebin.entities.SnippetDTO;
 import com.pastebin.services.SnippetService;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,6 +16,7 @@ import java.util.List;
 public class SnippetRestController {
     private final SnippetService snippetService;
     private final ObjectMapper objectMapper;
+
     @Autowired
     public SnippetRestController(SnippetService snippetService, ObjectMapper objectMapper) {
         this.snippetService = snippetService;
@@ -26,52 +24,26 @@ public class SnippetRestController {
     }
 
     @GetMapping(path = "/{id}")
-    public Snippet getSnippetJsonById(@PathVariable int id) {
-//        try {
-//            return objectMapper.writerWithView(JsonViewSchema.getView.class).writeValueAsString(snippetService.getSnippetById(id));
-//        } catch (Exception e) {
-//            return e.getMessage();
-//        }
-        return snippetService.getSnippetById(id);
-    }
-    public Snippet getSnippetById(@PathVariable int id) {
+    public SnippetDTO getSnippetJsonById(@PathVariable int id) {
         return snippetService.getSnippetById(id);
     }
 
-    public List<Snippet> getLastSnippets() {
-
-        return new ArrayList<>(snippetService.getLastSnippets(10));
-    }
     @RequestMapping(path = "/latest")
-    public String getLastSnippetsJson() {
-
-        List<Snippet> latestSnippets = new ArrayList<>(snippetService.getLastSnippets(10));
-
-        try {
-            return objectMapper.writerWithView(JsonViewSchema.getView.class).writeValueAsString(latestSnippets);
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+    public List<SnippetDTO> getLastSnippets() {
+        return snippetService.getLastSnippets(10);
     }
 
     @PostMapping(path = "/new")
-    public String addNewSnippet(@RequestBody String newSnippetJson) {
+    public int addNewSnippet(@RequestBody String newSnippetJson) {
         try {
-            String newCode = objectMapper.readValue(newSnippetJson, NewCode.class).getCode();
-            int newSnippetId = snippetService.saveSnippet(new Snippet(newCode));
+            NewCode newCode = objectMapper.readValue(newSnippetJson, NewCode.class);
 
-            return objectMapper
-                    .writerWithView(JsonViewSchema.postView.class)
-                    .writeValueAsString(snippetService.getSnippetById(newSnippetId));
+            return snippetService.saveSnippet(new Snippet(newCode.getCode()));
+
         } catch (Exception e) {
-            return e.getMessage();
+            System.out.println(e.getMessage());
+            return 0;
         }
-    }
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    static class NewCode {
-        String code;
     }
 }
 
