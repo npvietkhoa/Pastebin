@@ -8,5 +8,6 @@ public enum CodeLang {
     elixir,
     f,
     go,
-    haskell
+    haskell,
+    prolog
 }
