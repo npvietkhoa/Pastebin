@@ -1,4 +1,4 @@
-package com.pastebin.entities;
+package com.pastebin.snippet;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

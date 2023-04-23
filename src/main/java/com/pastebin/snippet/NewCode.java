@@ -1,4 +1,4 @@
-package com.pastebin.entities;
+package com.pastebin.snippet;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
