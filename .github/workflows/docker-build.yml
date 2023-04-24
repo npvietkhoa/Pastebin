@@ -41,4 +41,4 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/pastebin:1.0
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/pastebin/api:1.0
