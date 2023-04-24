@@ -31,11 +31,11 @@ jobs:
     steps:
       - name: Build the stack
       
-        run: docker-compose build
-#        uses: docker/build-push-action@v4
-#        with:
-#          compose-file: docker-compose.yml
-#          context: .
+#        run: docker-compose build
+        uses: docker/build-push-action@v4
+        with:
+          compose-file: ./docker-compose.yml
+          context: .
 
   push:
     runs-on: ubuntu-latest
