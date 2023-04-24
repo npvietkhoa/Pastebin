@@ -30,7 +30,7 @@ jobs:
     needs: login
     steps:
       - name: Build the stack      
-        run: docker-compose build
+        run: docker-compose build --file ./docker-compose.yml
 
   push:
     runs-on: ubuntu-latest
