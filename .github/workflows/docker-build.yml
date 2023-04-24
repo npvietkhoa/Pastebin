@@ -31,6 +31,9 @@ jobs:
     steps:
       - name: Set up Docker Buildx
         uses: docker/build-push-action@v4.0.0
+        
+      - name: debug compose
+        run: pwd
 
       - name: Build the stack
         run: docker-compose build
