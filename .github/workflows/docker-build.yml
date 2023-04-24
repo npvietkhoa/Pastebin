@@ -29,18 +29,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: login
     steps:
-      - name: Set up Docker Buildx
-        uses: docker/build-push-action@v4.0.0
-        
-      - name: debug compose
-        run: pwd && ls -al
-
       - name: Build the stack
-        run: docker-compose build
-#        uses: docker/build-push-action@v4
-#        with:
-#          compose-file: docker-compose.yml
-#          context: .
+#        run: docker-compose build
+        uses: docker/build-push-action@v4
+        with:
+          compose-file: docker-compose.yml
+          context: .
 
   push:
     runs-on: ubuntu-latest
