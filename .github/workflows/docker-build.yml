@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v4.0.0
         
       - name: debug compose
-        run: pwd
+        run: pwd && ls -al
 
       - name: Build the stack
         run: docker-compose build
