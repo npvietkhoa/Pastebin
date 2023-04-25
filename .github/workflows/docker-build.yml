@@ -28,7 +28,8 @@ jobs:
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v4.3.0
-        with: pastebin/api
+        with: 
+          image: pastebin/api
 
   build:
     runs-on: ubuntu-latest
