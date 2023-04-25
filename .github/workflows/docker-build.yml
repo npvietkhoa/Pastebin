@@ -29,7 +29,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4.3.0
         with: 
-          image: pastebin/api
+          images: pastebin/api
 
   build:
     runs-on: ubuntu-latest
