@@ -10,11 +10,10 @@ services:
       POSTGRES_DB: snippets
     ports:
       - "5432:5432"
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
+    
   app:
-    build: ./Dockerfile
+    build: .
+
     ports:
       - "8080:8080"
     depends_on:
@@ -24,5 +23,3 @@ services:
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: password
 
-volumes:
-  db_data:
