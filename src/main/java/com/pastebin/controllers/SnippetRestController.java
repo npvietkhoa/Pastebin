@@ -1,9 +1,9 @@
 package com.pastebin.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pastebin.entities.NewCode;
-import com.pastebin.entities.Snippet;
-import com.pastebin.entities.SnippetDTO;
+import com.pastebin.snippet.NewCode;
+import com.pastebin.snippet.Snippet;
+import com.pastebin.snippet.SnippetDTO;
 import com.pastebin.services.SnippetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

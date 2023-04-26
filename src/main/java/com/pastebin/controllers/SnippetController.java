@@ -1,7 +1,7 @@
 package com.pastebin.controllers;
 
 
-import com.pastebin.entities.SnippetDTO;
+import com.pastebin.snippet.SnippetDTO;
 import com.pastebin.services.SnippetService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;

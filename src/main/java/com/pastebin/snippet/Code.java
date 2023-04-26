@@ -1,12 +1,13 @@
-package com.pastebin.entities;
+package com.pastebin.snippet;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class NewCode {
+@AllArgsConstructor
+public class Code {
     private String code;
+    private CodeLang codeLang;
 }

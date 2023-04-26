@@ -1,6 +1,6 @@
 package com.pastebin.repositories;
 
-import com.pastebin.entities.Snippet;
+import com.pastebin.snippet.Snippet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,9 +1,9 @@
 package com.pastebin.services;
 
 
-import com.pastebin.entities.Snippet;
-import com.pastebin.entities.SnippetDTO;
-import com.pastebin.entities.SnippetDTOMapper;
+import com.pastebin.snippet.Snippet;
+import com.pastebin.snippet.SnippetDTO;
+import com.pastebin.snippet.SnippetDTOMapper;
 import com.pastebin.repositories.SnippetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
