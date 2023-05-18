@@ -1,6 +1,5 @@
 package com.pastebin.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pastebin.enums.CodeLang;
 import jakarta.persistence.Entity;
