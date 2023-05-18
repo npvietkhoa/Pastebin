@@ -20,15 +20,13 @@ public abstract class Snippet  {
     @Id
     @GeneratedValue
     private UUID id;
+    @Column(name = "code")
     private String code;
+    @Column(name = "code_syntax")
     private CodeLang codeSyntax = CodeLang.NONE;
+    @Column(name = "created_time")
     private final Timestamp createdDateTime = Timestamp.valueOf(LocalDateTime.now());
 
-
-
-    public Snippet(String code) {
-        this.code = code;
-    }
 
     public abstract void updateViewCount();
 }

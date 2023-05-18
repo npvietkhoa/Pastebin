@@ -1,5 +1,7 @@
 package com.pastebin.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pastebin.enums.CodeLang;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -12,24 +14,23 @@ import org.jetbrains.annotations.NotNull;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(force = true)
 @AllArgsConstructor
 @Entity
-@Table(name= "private_snippet")
+@Table(name= "limited_snippet")
 public class LimitedSnippet extends PublicSnippet {
 
+    @JsonIgnore
     @Transient
-    private long timeLimit;
+    private transient long timeLimit;
 
     private long viewLimit;
 
-    private final Timestamp expireTime = addMinutes(Timestamp.valueOf(LocalDateTime.now()), timeLimit);
-    public LimitedSnippet(String code) {
-        super.setCode(code);
-    }
+    private final Timestamp expireTime;
 
 
     public LimitedSnippet(String code, CodeLang codeSyntax, long timeLimit, long viewLimit) {
@@ -37,6 +38,7 @@ public class LimitedSnippet extends PublicSnippet {
         super.setCodeSyntax(codeSyntax);
         this.timeLimit = timeLimit;
         this.viewLimit = viewLimit;
+        this.expireTime = addMinutes(Timestamp.valueOf(LocalDateTime.now()), timeLimit);
     }
 
     @Override
@@ -44,13 +46,12 @@ public class LimitedSnippet extends PublicSnippet {
         super.updateViewCount();
     }
 
-
+    public void updateViewLimit() {
+        this.viewLimit -= 1;
+    }
     static @NotNull Timestamp addMinutes(@NotNull Timestamp timestamp, long numOfMinute) {
-        long milliSecInAMin = (long) (60 * 60 * 1000);
         Timestamp newTimestamp = new Timestamp(timestamp.getTime());
-        long milliSecToAdd = milliSecInAMin * numOfMinute;
-        long newTimeMilliSec = newTimestamp.getTime();
-        newTimestamp.setTime(newTimeMilliSec + milliSecToAdd);
+        newTimestamp.setTime(timestamp.getTime() + TimeUnit.MINUTES.toMillis(numOfMinute));
         return newTimestamp;
     }
 }

@@ -1,6 +1,7 @@
 package com.pastebin.models;
 
 import com.pastebin.enums.CodeLang;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -12,22 +13,13 @@ import lombok.*;
 @Entity
 @Table(name = "public_snippet")
 public class PublicSnippet extends Snippet {
+    @Column(name = "view_count")
     private long viewCount = 0;
 
     public PublicSnippet(String code, CodeLang codeSyntax) {
         super.setCode(code);
         super.setCodeSyntax(codeSyntax);
     }
-
-    public PublicSnippet(String code) {
-        super.setCode(code);
-    }
-
-//    @Override
-//    public void setCode(String code) {
-//        super.setCode(code);
-//    }
-
 
     @Override
     public void updateViewCount() {
