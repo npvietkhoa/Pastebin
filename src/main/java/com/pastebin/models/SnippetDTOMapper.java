@@ -3,7 +3,6 @@ package com.pastebin.models;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 
-import java.time.ZoneId;
 import java.util.function.Function;
 
 @Component
@@ -24,7 +23,6 @@ public class SnippetDTOMapper implements Function<Snippet, SnippetDTO>{
             case PUBLIC -> new PublicSnippet(snippetDto.getCode(), snippetDto.getCodeSyntax());
             case LIMITED -> new LimitedSnippet(snippetDto.getCode(), snippetDto.getCodeSyntax(), snippetDto.getTimeLimit(), snippetDto.getViewLimit());
             case PRIVATE -> null;
-            default -> null;
         };
    }
 }

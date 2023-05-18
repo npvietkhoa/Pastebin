@@ -1,60 +1,48 @@
 package com.pastebin.services;
 
-
-import com.pastebin.snippet.Snippet;
-import com.pastebin.snippet.SnippetDTO;
-import com.pastebin.snippet.SnippetDTOMapper;
-import com.pastebin.repositories.SnippetRepository;
+import com.pastebin.models.LimitedSnippet;
+import com.pastebin.models.PublicSnippet;
+import com.pastebin.models.Snippet;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class SnippetService {
-    private final SnippetRepository snippetRepository;
-    private final SnippetDTOMapper snippetDTOMapper;
+public class SnippetService implements SnippetServiceInterface {
+    private final LimitedSnippetService limitedSnippetService;
+    private final PublicSnippetService publicSnippetService;
 
     @Autowired
-    public SnippetService(SnippetRepository snippetRepository, SnippetDTOMapper snippetDTOMapper) {
-        this.snippetRepository = snippetRepository;
-        this.snippetDTOMapper = snippetDTOMapper;
-    }
-    public synchronized UUID saveSnippet(Snippet snippet) {
-        return snippetRepository.save(snippet).getId();
+    public SnippetService(LimitedSnippetService limitedSnippetService, PublicSnippetService publicSnippetService) {
+        this.limitedSnippetService = limitedSnippetService;
+        this.publicSnippetService = publicSnippetService;
     }
 
-    public List<SnippetDTO> findAll() {
-        return snippetRepository.findAll()
-                .stream()
-                .map(snippetDTOMapper)
-                .toList();
+    @Override
+    public UUID saveSnippet(@NotNull Snippet snippet) {
+        if (snippet instanceof LimitedSnippet) {
+            return limitedSnippetService.saveSnippet(snippet);
+        }
+
+        if (snippet instanceof PublicSnippet) {
+            return publicSnippetService.saveSnippet(snippet);
+        }
+        return UUID.randomUUID();
     }
 
-    public SnippetDTO getSnippetById(String id) {
-        return snippetDTOMapper.apply(snippetRepository.getReferenceById(UUID.fromString(id)));
+    @Override
+    public Optional<? extends Snippet> getSnippetById(String id) {
+        //search in limited database first
+        Optional<? extends Snippet> snippet = limitedSnippetService.getSnippetById(id);
+        if (snippet.isEmpty()) {// if in limited database not found then in public one
+            snippet = publicSnippetService.getSnippetById(id);
+            return snippet;
+        } else {
+            return snippet;
+        }
     }
 
-    public List<SnippetDTO> getLastSnippets(int quantity) {
-        int repositorySize = snippetRepository.findAll().size();
-
-        List<SnippetDTO> lastSnippetDTOs = new ArrayList<>();
-
-        snippetRepository.findAll()
-                .stream()
-                .skip(quantity > repositorySize ? 0 : repositorySize - quantity)
-                .map(snippetDTOMapper)
-                .forEach(lastSnippetDTOs::add);
-
-        Collections.reverse(lastSnippetDTOs);
-        return lastSnippetDTOs;
-    }
-//    private LocalDateTime convertToLocalDateTimeViaInstant(@NotNull Date dateToConvert) {
-//        return dateToConvert.toInstant()
-//                .atZone(ZoneId.systemDefault())
-//                .toLocalDateTime();
-//    }
 }
