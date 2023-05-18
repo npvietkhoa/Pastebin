@@ -12,7 +12,9 @@ on:
     branches: 
       - oop-hierarchy
   pull_request:
-    branches: [ "master" ]
+    branches:
+      - master
+      - oop-hierarchy
 
 permissions:
   contents: read
