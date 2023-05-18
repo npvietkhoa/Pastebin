@@ -1,7 +1,6 @@
 package com.pastebin.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pastebin.snippet.NewCode;
 import com.pastebin.snippet.Snippet;
 import com.pastebin.snippet.SnippetDTO;
 import com.pastebin.services.SnippetService;
