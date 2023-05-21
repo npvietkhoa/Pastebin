@@ -5,4 +5,5 @@ A platform for sharing your code with other developers.
 
 Features:
   - ordinary snippets
-  - limited snippets
+  - limited snippets - limited by view and time.
+  - (WIP) private snippets with password
