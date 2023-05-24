@@ -29,23 +29,19 @@ public class SnippetRestController {
     public SnippetDTO getSnippetJsonById(@PathVariable String id) {
         return snippetService.getSnippetById(id);
     }
-
-//    @RequestMapping(path = "/latest")
-//    public List<SnippetDTO> getLastSnippets() {
-//        return snippetService.getLastSnippets(10);
-//    }
-//    @GetMapping(path = "/all")
-//    List<SnippetDTO> getAll() {
-//        return .getAll().stream().map(snippetDTOMapper).toList();
-//    }
+    @GetMapping(value = {"/latest/{quantity}", "/latest"})
+    public List<SnippetDTO> getLastSnippets(@PathVariable(required = false) String quantity) {
+        return snippetService.getLatestSnippets(quantity != null ? Integer.parseInt(quantity) : 10);
+    }
+    @GetMapping(path = "/all")
+    List<SnippetDTO> getAll() {
+        return snippetService.findAll();
+    }
 
    @PostMapping(value = "/new")
-    public UUID getNewCode(@RequestBody String json) throws JsonProcessingException {
-       return snippetService.saveSnippet(
-                snippetDTOMapper.toSnippet(
-                        objectMapper.readValue(json, SnippetDTO.class)
-                )
-        );
+   @ResponseBody
+    public String getNewCode(@RequestBody String newCodeJson) throws JsonProcessingException {
+        return "ID: " + snippetService.saveSnippet(newCodeJson);
     }
 }
 
