@@ -36,6 +36,7 @@ public class PublicSnippetService implements SnippetServiceInterface {
     }
 
     public List<PublicSnippet> getAll() {
-        return publicSnippetRepository.findAll();
+        return publicSnippetRepository.getAllPublicSnippet();
     }
 }
+

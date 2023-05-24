@@ -17,7 +17,7 @@ public class SnippetService {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public SnippetService(LimitedSnippetService limitedSnippetService, PublicSnippetService publicSnippetService) {
+    public SnippetService(LimitedSnippetService limitedSnippetService, PublicSnippetService publicSnippetService, SnippetDTOMapper snippetDTOMapper, ObjectMapper objectMapper) {
         this.limitedSnippetService = limitedSnippetService;
         this.publicSnippetService = publicSnippetService;
         this.snippetDTOMapper = snippetDTOMapper;
