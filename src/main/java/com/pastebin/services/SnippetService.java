@@ -10,37 +10,45 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class SnippetService implements SnippetServiceInterface {
+public class SnippetService {
     private final LimitedSnippetService limitedSnippetService;
     private final PublicSnippetService publicSnippetService;
+    private final SnippetDTOMapper snippetDTOMapper;
+    private final ObjectMapper objectMapper;
 
     @Autowired
     public SnippetService(LimitedSnippetService limitedSnippetService, PublicSnippetService publicSnippetService) {
         this.limitedSnippetService = limitedSnippetService;
         this.publicSnippetService = publicSnippetService;
+        this.snippetDTOMapper = snippetDTOMapper;
+        this.objectMapper = objectMapper;
     }
 
-    @Override
-    public UUID saveSnippet(@NotNull Snippet snippet) {
-        if (snippet instanceof LimitedSnippet) {
-            return limitedSnippetService.saveSnippet(snippet);
+
+    public UUID saveSnippet(@NotNull String newSnippetJson) throws JsonProcessingException {
+        Snippet newSnippet = snippetDTOMapper.toSnippet(
+                objectMapper.readValue(newSnippetJson, SnippetDTO.class)
+        );
+
+        if (newSnippet instanceof LimitedSnippet) {
+            return limitedSnippetService.saveSnippet(newSnippet);
         }
 
-        if (snippet instanceof PublicSnippet) {
-            return publicSnippetService.saveSnippet(snippet);
+        if (newSnippet instanceof PublicSnippet) {
+            return publicSnippetService.saveSnippet(newSnippet);
         }
-        return UUID.randomUUID();
+        return UUID.fromString("0");
     }
 
-    @Override
-    public Optional<? extends Snippet> getSnippetById(String id) {
+    public SnippetDTO getSnippetById(String id) {
         //search in limited database first
         Optional<? extends Snippet> snippet = limitedSnippetService.getSnippetById(id);
         if (snippet.isEmpty()) {// if in limited database not found then in public one
             snippet = publicSnippetService.getSnippetById(id);
-            return snippet;
+            return snippetDTOMapper.apply(snippet.get());
         } else {
-            return snippet;
+
+            return snippetDTOMapper.apply(snippet.get());
         }
     }
 
