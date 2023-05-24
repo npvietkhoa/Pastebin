@@ -52,4 +52,26 @@ public class SnippetService {
         }
     }
 
+    public List<SnippetDTO> findAll() {
+        return publicSnippetService.getAll()
+                .stream()
+                .map(snippetDTOMapper)
+                .toList();
+    }
+
+    public List<SnippetDTO> getLatestSnippets(int quantity) {
+        int repositorySize = publicSnippetService.getAll().size();
+
+        List<SnippetDTO> latestSnippetDTOs = new ArrayList<>();
+
+        publicSnippetService.getAll()
+                .stream()
+                .skip(quantity > repositorySize ? 0 : repositorySize - quantity)
+                .map(snippetDTOMapper)
+                .forEach(latestSnippetDTOs::add);
+
+        Collections.reverse(latestSnippetDTOs);
+        return latestSnippetDTOs;
+    }
+
 }
