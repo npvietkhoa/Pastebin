@@ -1,5 +1,6 @@
 package com.pastebin.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.pastebin.models.LimitedSnippet;
 import com.pastebin.models.Snippet;
 import com.pastebin.repositories.LimitedSnippetRepository;

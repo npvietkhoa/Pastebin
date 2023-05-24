@@ -1,14 +1,13 @@
 package com.pastebin.services;
 
-import com.pastebin.models.LimitedSnippet;
-import com.pastebin.models.PublicSnippet;
-import com.pastebin.models.Snippet;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pastebin.models.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class SnippetService implements SnippetServiceInterface {

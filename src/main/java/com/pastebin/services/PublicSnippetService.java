@@ -21,7 +21,6 @@ public class PublicSnippetService implements SnippetServiceInterface {
 
     @Override
     public UUID saveSnippet(Snippet snippet) {
-        PublicSnippet po = (PublicSnippet) snippet;
         return publicSnippetRepository.save((PublicSnippet) snippet).getId();
     }
 
