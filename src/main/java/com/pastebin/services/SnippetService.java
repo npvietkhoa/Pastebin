@@ -1,60 +1,77 @@
 package com.pastebin.services;
 
-
-import com.pastebin.snippet.Snippet;
-import com.pastebin.snippet.SnippetDTO;
-import com.pastebin.snippet.SnippetDTOMapper;
-import com.pastebin.repositories.SnippetRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pastebin.models.*;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class SnippetService {
-    private final SnippetRepository snippetRepository;
+    private final LimitedSnippetService limitedSnippetService;
+    private final PublicSnippetService publicSnippetService;
     private final SnippetDTOMapper snippetDTOMapper;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public SnippetService(SnippetRepository snippetRepository, SnippetDTOMapper snippetDTOMapper) {
-        this.snippetRepository = snippetRepository;
+    public SnippetService(LimitedSnippetService limitedSnippetService, PublicSnippetService publicSnippetService, SnippetDTOMapper snippetDTOMapper, ObjectMapper objectMapper) {
+        this.limitedSnippetService = limitedSnippetService;
+        this.publicSnippetService = publicSnippetService;
         this.snippetDTOMapper = snippetDTOMapper;
+        this.objectMapper = objectMapper;
     }
-    public synchronized UUID saveSnippet(Snippet snippet) {
-        return snippetRepository.save(snippet).getId();
+
+
+    public UUID saveSnippet(@NotNull String newSnippetJson) throws JsonProcessingException {
+        Snippet newSnippet = snippetDTOMapper.toSnippet(
+                objectMapper.readValue(newSnippetJson, SnippetDTO.class)
+        );
+
+        if (newSnippet instanceof LimitedSnippet) {
+            return limitedSnippetService.saveSnippet(newSnippet);
+        }
+
+        if (newSnippet instanceof PublicSnippet) {
+            return publicSnippetService.saveSnippet(newSnippet);
+        }
+        return UUID.fromString("0");
+    }
+
+    public SnippetDTO getSnippetById(String id) {
+        //search in limited database first
+        Optional<? extends Snippet> snippet = limitedSnippetService.getSnippetById(id);
+        if (snippet.isEmpty()) {// if in limited database not found then in public one
+            snippet = publicSnippetService.getSnippetById(id);
+            return snippetDTOMapper.apply(snippet.get());
+        } else {
+
+            return snippetDTOMapper.apply(snippet.get());
+        }
     }
 
     public List<SnippetDTO> findAll() {
-        return snippetRepository.findAll()
+        return publicSnippetService.getAll()
                 .stream()
                 .map(snippetDTOMapper)
                 .toList();
     }
 
-    public SnippetDTO getSnippetById(String id) {
-        return snippetDTOMapper.apply(snippetRepository.getReferenceById(UUID.fromString(id)));
-    }
+    public List<SnippetDTO> getLatestSnippets(int quantity) {
+        int repositorySize = publicSnippetService.getAll().size();
 
-    public List<SnippetDTO> getLastSnippets(int quantity) {
-        int repositorySize = snippetRepository.findAll().size();
+        List<SnippetDTO> latestSnippetDTOs = new ArrayList<>();
 
-        List<SnippetDTO> lastSnippetDTOs = new ArrayList<>();
-
-        snippetRepository.findAll()
+        publicSnippetService.getAll()
                 .stream()
                 .skip(quantity > repositorySize ? 0 : repositorySize - quantity)
                 .map(snippetDTOMapper)
-                .forEach(lastSnippetDTOs::add);
+                .forEach(latestSnippetDTOs::add);
 
-        Collections.reverse(lastSnippetDTOs);
-        return lastSnippetDTOs;
+        Collections.reverse(latestSnippetDTOs);
+        return latestSnippetDTOs;
     }
-//    private LocalDateTime convertToLocalDateTimeViaInstant(@NotNull Date dateToConvert) {
-//        return dateToConvert.toInstant()
-//                .atZone(ZoneId.systemDefault())
-//                .toLocalDateTime();
-//    }
+
 }
